@@ -1,6 +1,9 @@
 <template>
 	<div>
 		<div>Autocomplete</div>
+		<InputForm
+			:data="this"
+		/>
 		<!--<InputForm-->
 		<!--updateField={this.updateField}-->
 		<!--updateCheckbox={this.updateCheckbox}-->
@@ -16,6 +19,7 @@
 <script>
 	import * as SmartyStreetsSDK from "smartystreets-javascript-sdk";
 	import Vue from "vue";
+	import InputForm from "./InputForm";
 
 	const SmartyStreetsCore = SmartyStreetsSDK.core;
 	const websiteKey = ""; // Your website key here
@@ -30,6 +34,7 @@
 
 	export default {
 		name: "Autocomplete",
+		components: {InputForm},
 		data() {
 			return {
 				shouldValidate: true,
@@ -43,12 +48,6 @@
 			};
 		},
 		methods: {
-			updateField(e) {
-				this[e.target.id] = e.target.value;
-			},
-			updateCheckbox(e) {
-				this[e.target.id] = e.target.checked;
-			},
 			queryAutocompleteForSuggestions(query) {
 				const lookup = new SmartyStreetsSDK.usAutocomplete.Lookup(query);
 
@@ -199,9 +198,6 @@
 					}
 				}
 			},
-		},
-		props: {
-			Autocomplete: {},
 		},
 	};
 </script>
