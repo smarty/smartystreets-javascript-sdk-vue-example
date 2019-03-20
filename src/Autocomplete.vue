@@ -87,7 +87,7 @@
 				lookup.state = this.administrativeArea;
 				lookup.zipCode = this.postalCode;
 
-				this.usStreetClient.send(lookup)
+				usStreetClient.send(lookup)
 					.then(this.updateStateFromValidatedUsAddress)
 					.catch(console.warn);
 			},
@@ -108,7 +108,7 @@
 				lookup.postalCode = this.postalCode;
 				lookup.country = this.country;
 
-				this.internationalStreetClient.send(lookup)
+				internationalStreetClient.send(lookup)
 					.then(this.updateStateFromValidatedInternationalAddress)
 					.catch(console.warn);
 			},
