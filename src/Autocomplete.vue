@@ -112,15 +112,92 @@
 					.then(this.updateStateFromValidatedInternationalAddress)
 					.catch(console.warn);
 			},
-			updateStateFromValidatedInternationalAddress() {
-				// TODO: refer to the jquery plugin for how this should work. It's complicated for the international side of things
-				const candidate = response.lookups[0].result[0];
-				// this.address1 = candidate.address1;
-				// this.address2 = candidate.address2;
-				// this.locality = candidate.components.locality;
-				// this.administrativeArea = candidate.components.administrativeArea;
-				// this.postalCode = candidate.components.postalCode;
-				// this.country = candidate.components.countryIso3;
+			updateStateFromValidatedInternationalAddress(response) {
+				const validatedAddress = response.lookups[0].result[0];
+
+				this.locality = validatedAddress.components.locality;
+				this.administrativeArea = validatedAddress.components.administrativeArea;
+				this.postalCode = validatedAddress.components.postalCode;
+				this.country = validatedAddress.components.countryIso3;
+				this.removeComponentsFromAddressLines(validatedAddress);
+				this.address1 = validatedAddress.address1;
+				this.address2 = this.buildAddress2(validatedAddress);
+			},
+			removeComponentsFromAddressLines(validatedAddress) {
+				if (validatedAddress.metadata.addressFormat !== "undefined") {
+					const addressFormatLines = validatedAddress.metadata.addressFormat.split("|");
+
+					for (const addressLineNumber in addressFormatLines) {
+						const componentsToRemove = [
+							"locality",
+							"administrative_area",
+							"postal_code",
+							"country",
+						];
+						const addressComponent = addressFormatLines[addressLineNumber];
+						const lineNumberAsInt = parseInt(addressLineNumber) + 1;
+						const addressLineComponent = "address" + lineNumberAsInt;
+
+						componentsToRemove.forEach((componentName) => {
+							this.removeComponentFromAddressLine(addressComponent, componentName, addressLineComponent, validatedAddress);
+						});
+						this.removeExtraWhitespace(addressLineComponent, validatedAddress);
+					}
+				} else {
+					this.emptyLastNonEmptyAddressLine(validatedAddress);
+				}
+			},
+			removeComponentFromAddressLine(addressComponent, componentName, addressLineComponent, validatedAddress) {
+				if (addressComponent.includes(componentName)) {
+					const regex = new RegExp(validatedAddress.components[componentName], "g");
+					const newAddressLine = validatedAddress[addressLineComponent].replace(regex, "");
+					validatedAddress[addressLineComponent] = newAddressLine;
+				}
+			},
+			removeExtraWhitespace(addressLineComponent, validatedAddress) {
+				let addressLine = validatedAddress[addressLineComponent];
+
+				removeLeadingWhitespace();
+				removeTrailingWhitespace();
+				replaceMultipleWhitespaceWithSingle();
+				validatedAddress[addressLineComponent] = addressLine;
+
+				function removeLeadingWhitespace() {
+					addressLine = addressLine.replace(/^\s+/g, "");
+				}
+
+				function removeTrailingWhitespace() {
+					addressLine = addressLine.replace(/\s+$/g, "");
+				}
+
+				function replaceMultipleWhitespaceWithSingle() {
+					addressLine = addressLine.replace(/\s+/g, " ");
+				}
+			},
+			emptyLastNonEmptyAddressLine(validatedAddress) {
+				const addressLineComponent = "address2";
+
+				if (validatedAddress[addressLineComponent] !== "undefined" && validatedAddress[addressLineComponent] !== "") {
+					validatedAddress[addressLineComponent] = "";
+				}
+			},
+			buildAddress2(validatedAddress) {
+				let addressLine2 = validatedAddress.address2;
+
+				for (let i = 3; i <= 12; i++) {
+					addAddressLine(validatedAddress["address" + i], validatedAddress["address" + (i + 1)]);
+				}
+
+				return addressLine2;
+
+				function addAddressLine(addressLine, nextAddressLine) {
+					if (addressLine !== "undefined" && nextAddressLine !== "undefined") {
+						if (addressLine2 !== "") {
+							addressLine2 += ", ";
+						}
+						addressLine2 += addressLine;
+					}
+				}
 			},
 		},
 		props: {
