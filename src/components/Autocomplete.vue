@@ -4,12 +4,6 @@
 		<InputForm
 			:data="this"
 		/>
-		<!--<InputForm-->
-		<!--updateField={this.updateField}-->
-		<!--updateCheckbox={this.updateCheckbox}-->
-		<!--queryAutocompleteForSuggestions={this.queryAutocompleteForSuggestions}-->
-		<!--state={this.state}-->
-		<!--/>-->
 		<!--<Suggestions-->
 		<!--suggestions={this.state.suggestions}-->
 		<!--selectSuggestion={this.selectSuggestion}-->
