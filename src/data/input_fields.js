@@ -8,15 +8,15 @@ const inputFields = [
 		fieldLabel: "Address 2",
 	},
 	{
-		fieldName: "locality",
+		fieldName: "city",
 		fieldLabel: "City",
 	},
 	{
-		fieldName: "administrativeArea",
+		fieldName: "state",
 		fieldLabel: "State",
 	},
 	{
-		fieldName: "postalCode",
+		fieldName: "zipCode",
 		fieldLabel: "ZIP Code",
 	},
 ];
