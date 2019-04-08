@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="autocomplete">
 		<div>Autocomplete</div>
 		<InputForm
 			:data="this"
@@ -195,3 +195,8 @@
 		},
 	};
 </script>
+
+
+<style lang="scss" scoped>
+	@import "Autocomplete";
+</style>
