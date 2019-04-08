@@ -48,7 +48,7 @@
 					.then(response => {
 						this.suggestions = response.result;
 					})
-					.catch(console.warn);
+					.catch((e) => this.error = e.error);
 			},
 			selectSuggestion(suggestion) {
 				this.useAutoCompleteSuggestion(suggestion);
