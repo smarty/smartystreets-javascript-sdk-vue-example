@@ -3,17 +3,19 @@
 		<InputForm
 			:data="this"
 		/>
-		<!--<Suggestions-->
-		<!--suggestions={this.state.suggestions}-->
-		<!--selectSuggestion={this.selectSuggestion}-->
-		<!--/>-->
+		<Suggestions
+			:suggestions="this.suggestions"
+			:selectSuggestion="this.selectSuggestion"
+		/>
 	</div>
 </template>
+
 <script>
 	import Vue from "vue";
 	import * as SmartyStreetsSDK from "smartystreets-javascript-sdk";
 	import * as sdkUtils from "smartystreets-javascript-sdk-utils";
 	import InputForm from "./InputForm";
+	import Suggestions from "./Suggestions";
 
 	const SmartyStreetsCore = SmartyStreetsSDK.core;
 	const websiteKey = ""; // Your website key here
@@ -26,7 +28,7 @@
 
 	export default {
 		name: "Autocomplete",
-		components: {InputForm},
+		components: {InputForm, Suggestions},
 		data() {
 			return {
 				shouldValidate: true,
@@ -106,7 +108,6 @@
 		},
 	};
 </script>
-
 
 <style lang="scss" scoped>
 	@import "Autocomplete";
