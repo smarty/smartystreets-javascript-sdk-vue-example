@@ -10,8 +10,9 @@
 	</div>
 </template>
 <script>
-	import * as SmartyStreetsSDK from "smartystreets-javascript-sdk";
 	import Vue from "vue";
+	import * as SmartyStreetsSDK from "smartystreets-javascript-sdk";
+	import * as sdkUtils from "smartystreets-javascript-sdk-utils";
 	import InputForm from "./InputForm";
 
 	const SmartyStreetsCore = SmartyStreetsSDK.core;
@@ -31,9 +32,9 @@
 				shouldValidate: true,
 				address1: "",
 				address2: "",
-				locality: "",
-				administrativeArea: "",
-				postalCode: "",
+				city: "",
+				state: "",
+				zipCode: "",
 				country: "US",
 				suggestions: [],
 			};
@@ -58,29 +59,48 @@
 			},
 			useAutoCompleteSuggestion(suggestion) {
 				this.address1 = suggestion.streetLine;
-				this.locality = suggestion.city;
-				this.administrativeArea = suggestion.state;
+				this.city = suggestion.city;
+				this.state = suggestion.state;
 				this.suggestions = [];
 			},
 			validateAddress() {
 				let lookup = new SmartyStreetsSDK.usStreet.Lookup();
 				lookup.street = this.address1;
 				lookup.street2 = this.address2;
-				lookup.city = this.locality;
-				lookup.state = this.administrativeArea;
-				lookup.zipCode = this.postalCode;
+				lookup.city = this.city;
+				lookup.state = this.state;
+				lookup.zipCode = this.zipCode;
 
-				usStreetClient.send(lookup)
-					.then(this.updateStateFromValidatedAddress)
-					.catch(console.warn);
+				if (!!lookup.street) {
+					usStreetClient.send(lookup)
+						.then(this.updateStateFromValidatedAddress)
+						.catch(e => this.error = e.error);
+				} else {
+					this.error = "A street address is required.";
+				}
 			},
 			updateStateFromValidatedAddress(response) {
-				const candidate = response.lookups[0].result[0];
-				this.address1 = candidate.deliveryLine1;
-				this.address2 = candidate.deliveryLine2;
-				this.locality = candidate.components.cityName;
-				this.administrativeArea = candidate.components.state;
-				this.postalCode = candidate.components.zipCode + "-" + candidate.components.plus4Code;
+				const lookup = response.lookups[0];
+				const isValid = sdkUtils.isValid(lookup);
+				const isAmbiguous = sdkUtils.isAmbiguous(lookup);
+				const isMissingSecondary = sdkUtils.isMissingSecondary(lookup);
+
+				if (!isValid) {
+					this.error = "The address is invalid.";
+				} else if (isAmbiguous) {
+					this.error = "The address is ambiguous.";
+				} else if (isMissingSecondary) {
+					this.error = "The address is missing a secondary number.";
+				} else if (isValid) {
+					const candidate = lookup.result[0];
+
+					this.address1 = candidate.deliveryLine1;
+					this.address2 = candidate.deliveryLine2;
+					this.city = candidate.components.cityName;
+					this.state = candidate.components.state;
+					this.zipCode = candidate.components.zipCode + "-" + candidate.components.plus4Code;
+					this.error = "";
+				}
 			},
 		},
 	};
