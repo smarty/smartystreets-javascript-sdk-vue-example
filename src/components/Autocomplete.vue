@@ -37,6 +37,7 @@
 				zipCode: "",
 				country: "US",
 				suggestions: [],
+				error: "",
 			};
 		},
 		methods: {
