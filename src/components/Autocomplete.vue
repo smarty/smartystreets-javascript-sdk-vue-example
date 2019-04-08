@@ -19,11 +19,9 @@
 	const smartyStreetsSharedCredentials = new SmartyStreetsCore.SharedCredentials(websiteKey);
 	const autoCompleteClientBuilder = new SmartyStreetsCore.ClientBuilder(smartyStreetsSharedCredentials);
 	const usStreetClientBuilder = new SmartyStreetsCore.ClientBuilder(smartyStreetsSharedCredentials);
-	const internationalStreetClientBuilder = new SmartyStreetsCore.ClientBuilder(smartyStreetsSharedCredentials);
 
 	const autoCompleteClient = autoCompleteClientBuilder.buildUsAutocompleteClient();
 	const usStreetClient = usStreetClientBuilder.buildUsStreetApiClient();
-	const internationalStreetClient = internationalStreetClientBuilder.buildInternationalStreetClient();
 
 	export default {
 		name: "Autocomplete",
