@@ -46,6 +46,7 @@
 				</option>
 			</select>
 		</div>
+		<button v-on:click="e => {e.preventDefault(); data.validateAddress();}">Validate</button>
 	</form>
 </template>
 
