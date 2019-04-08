@@ -28,6 +28,7 @@
 				type="text"
 				:id="inputField.fieldName"
 				v-model="data[inputField.fieldName]"
+				v-on:keyup="e => {if(e.target.id === 'address1') {data.queryAutocompleteForSuggestions(e.target.value)}}"
 			/>
 		</div>
 		<div class="autocomplete--input-group">
