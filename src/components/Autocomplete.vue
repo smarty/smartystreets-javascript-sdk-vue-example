@@ -7,6 +7,12 @@
 			:suggestions="suggestions"
 			:selectSuggestion="selectSuggestion"
 		/>
+		<div
+			v-if="error"
+		>
+			<h3>Validation Error:</h3>
+			{{ error }}
+		</div>
 	</div>
 </template>
 
@@ -18,7 +24,7 @@
 	import Suggestions from "./Suggestions";
 
 	const SmartyStreetsCore = SmartyStreetsSDK.core;
-	const websiteKey = "14948715331511101"; // Your website key here
+	const websiteKey = ""; // Your website key here
 	const smartyStreetsSharedCredentials = new SmartyStreetsCore.SharedCredentials(websiteKey);
 	const autoCompleteClientBuilder = new SmartyStreetsCore.ClientBuilder(smartyStreetsSharedCredentials);
 	const usStreetClientBuilder = new SmartyStreetsCore.ClientBuilder(smartyStreetsSharedCredentials);
