@@ -10,7 +10,7 @@
 		<div
 			v-if="error"
 		>
-			<h3>Validation Error:</h3>
+			<h3>Error:</h3>
 			{{ error }}
 		</div>
 	</div>
