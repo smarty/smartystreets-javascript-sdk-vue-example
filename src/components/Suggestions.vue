@@ -1,10 +1,9 @@
 <template>
 	<div>
-		Hi
 		<div v-for="suggestion in suggestions">
 			<Suggestion
 				:suggestion="suggestion"
-				selectSuggestion="() => selectSuggestion(suggestion)"
+				:selectSuggestion="() => this.selectSuggestion(suggestion)"
 			/>
 		</div>
 	</div>
