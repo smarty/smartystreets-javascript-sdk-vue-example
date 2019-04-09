@@ -3,7 +3,7 @@
 		<div v-for="suggestion in suggestions">
 			<Suggestion
 				:suggestion="suggestion"
-				:selectSuggestion="() => this.selectSuggestion(suggestion)"
+				:selectSuggestion="selectSuggestion"
 			/>
 		</div>
 	</div>
