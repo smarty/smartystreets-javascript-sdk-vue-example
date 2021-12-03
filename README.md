@@ -1,21 +1,14 @@
-# smartystreets-javascript-sdk-vue-example
+# SmartyStreets JavaScript SDK - Vue Example
 
-> A Vue.js project
+This is an example implementation of the SmartyStreets JavaScript SDK in Vue.
 
-## Build Setup
+To spin this example up and see it in action:
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+1. [Sign up for a SmartyStreets account](https://smartystreets.com/signup)
+2. [Create a website key](https://smartystreets.com/account/keys).
+3. [Clone this repository](https://github.com/smartystreets/smartystreets-javascript-sdk-vue-example).
+4. From your terminal, navigate into the cloned repository and install dependencies with your favorite package manager:
+    - With NPM: `npm install`
+    - With Yarn `yarn install`
+5. Open `utils.js` in the cloned repository, adding [the website key you created earlier](https://smartystreets.com/account/keys) to line `6`.
+6. From the cloned repository folder on your terminal, run `npm run dev`. This will open your browser and load the implementation demo.
