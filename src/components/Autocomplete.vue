@@ -1,132 +1,72 @@
 <template>
-	<div class="autocomplete">
-		<InputForm
-			:data="this"
-		/>
+  <div class="autocomplete">
+    <InputForm :data="this"/>
 
     <div v-for="suggestion in suggestions">
-      <Suggestion
-          :suggestion="suggestion"
-          :selectSuggestion="selectSuggestion"
-      />
+      <div class="autocomplete--suggestion" v-on:click="() => selectSuggestion(suggestion)">
+        {{ formatSuggestion(suggestion).address }}
+      </div>
     </div>
 
-		<div
-			v-if="error"
-		>
-			<h3>Error:</h3>
-			{{ error }}
-		</div>
-	</div>
+    <div v-if="error">
+      <h3>Error:</h3>
+      {{ error }}
+    </div>
+  </div>
 </template>
 
 <script>
-	import * as SmartyStreetsSDK from "smartystreets-javascript-sdk";
-	import * as sdkUtils from "smartystreets-javascript-sdk-utils";
-	import InputForm from "./InputForm";
-	import Suggestion from "./Suggestion";
-	import {formatSuggestion} from "../../utils.js";
+import InputForm from "./InputForm";
 
-  const SmartyStreetsCore = SmartyStreetsSDK.core;
-	const websiteKey = ""; // Your website key here
-	const smartyStreetsSharedCredentials = new SmartyStreetsCore.SharedCredentials(websiteKey);
-	const autoCompleteClientBuilder = new SmartyStreetsCore.ClientBuilder(smartyStreetsSharedCredentials);
-	const usStreetClientBuilder = new SmartyStreetsCore.ClientBuilder(smartyStreetsSharedCredentials);
+import {
+  queryAutocompleteForSuggestions,
+  selectSuggestion,
+  validateAddress,
+  updateStateFromValidatedAddress,
+  formatSuggestion
+} from "../../utils.js";
 
-	const autoCompleteClient = autoCompleteClientBuilder.buildUsAutocompleteProClient();
-	const usStreetClient = usStreetClientBuilder.buildUsStreetApiClient();
-
-	export default {
-		name: "Autocomplete",
-		components: {InputForm, Suggestion},
-		data() {
-			return {
-				shouldValidate: true,
-				address1: "",
-				address2: "",
-				city: "",
-				state: "",
-				zipCode: "",
-				country: "US",
-				suggestions: [],
-				error: "",
-			};
-		},
-		methods: {
-			queryAutocompleteForSuggestions(query) {
-				const lookup = new SmartyStreetsSDK.usAutocompletePro.Lookup(query);
-				if (query.entries > 1) {
-				  lookup.selected = formatSuggestion(query).selected;
-        }
-
-        if (query) {
-          autoCompleteClient.send(lookup).then(response => {
-              this.suggestions = response.result;
-            })
-            .catch((e) => this.error = e.error);
-        } else {
-          this.suggestions = [];
-        }
-			},
-			selectSuggestion(suggestion) {
-			  if (suggestion.entries > 1) {
-			    this.queryAutocompleteForSuggestions(suggestion);
-        } else {
-				  this.useAutoCompleteSuggestion(suggestion);
-        }
-			},
-			useAutoCompleteSuggestion(suggestion) {
-			  const secondary = suggestion.secondary ? ` ${suggestion.secondary}` : "";
-				this.address1 = suggestion.streetLine + secondary;
-				this.city = suggestion.city;
-				this.state = suggestion.state;
-				this.zipCode = suggestion.zipcode;
-				this.suggestions = [];
-			},
-			validateAddress() {
-				let lookup = new SmartyStreetsSDK.usStreet.Lookup();
-				lookup.street = this.address1;
-				lookup.street2 = this.address2;
-				lookup.city = this.city;
-				lookup.state = this.state;
-				lookup.zipCode = this.zipCode;
-
-				if (!!lookup.street) {
-					usStreetClient.send(lookup)
-						.then(this.updateStateFromValidatedAddress)
-						.catch(e => this.error = e.error);
-				} else {
-					this.error = "A street address is required.";
-				}
-			},
-			updateStateFromValidatedAddress(response) {
-				const lookup = response.lookups[0];
-				const isValid = sdkUtils.isValid(lookup);
-				const isAmbiguous = sdkUtils.isAmbiguous(lookup);
-				const isMissingSecondary = sdkUtils.isMissingSecondary(lookup);
-
-				if (!isValid) {
-					this.error = "The address is invalid.";
-				} else if (isAmbiguous) {
-					this.error = "The address is ambiguous.";
-				} else if (isMissingSecondary) {
-					this.error = "The address is missing a secondary number.";
-				} else if (isValid) {
-					const candidate = lookup.result[0];
-
-					this.address1 = candidate.deliveryLine1;
-					this.address2 = candidate.deliveryLine2;
-					this.city = candidate.components.cityName;
-					this.state = candidate.components.state;
-					this.zipCode = candidate.components.zipCode + "-" + candidate.components.plus4Code;
-					this.error = "";
-				}
-			},
-      formatSuggestion,
-		},
-	};
+export default {
+  name: "Autocomplete",
+  components: {InputForm},
+  data() {
+    return {
+      shouldValidate: true,
+      address1: "",
+      address2: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      country: "US",
+      suggestions: [],
+      error: "",
+    };
+  },
+  methods: {
+    queryAutocompleteForSuggestions,
+    selectSuggestion,
+    validateAddress,
+    updateStateFromValidatedAddress,
+    formatSuggestion,
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-	@import "Autocomplete";
+<style scoped>
+  .autocomplete {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .autocomplete--suggestion {
+    font-family: Helvetica, Arial, sans-serif;
+    padding: 5px 10px;
+  }
+
+  .autocomplete--suggestion:hover {
+      background-color: #D9ECF0;
+      color: #02355A;
+      cursor: pointer;
+  }
 </style>
