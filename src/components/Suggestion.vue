@@ -1,35 +1,21 @@
 <template>
-	<div
-		v-bind:class="buildResultHoverClass()"
-		v-on:click="() => selectSuggestion(suggestion)"
-		v-on:mouseenter="() => setIsHovered(true)"
-		v-on:mouseleave="() => setIsHovered(false)"
-	>
-		{{ suggestion.text }}
+	<div class="autocomplete--suggestion" v-on:click="() => selectSuggestion(suggestion)">
+		{{ formatSuggestion(suggestion).address }}
 	</div>
 </template>
 
 <script>
-	export default {
+  import {formatSuggestion} from "../../utils.js";
+
+  export default {
 		name: "Suggestion",
 		props: {
 			"suggestion": Object,
 			"selectSuggestion": Function,
 		},
-		data() {
-			return {
-				isHovered: false,
-			};
-		},
-		methods: {
-			setIsHovered(isHovered) {
-				this.isHovered = isHovered;
-			},
-			buildResultHoverClass() {
-				const className = "autocomplete--suggestion";
-				return this.isHovered ? className + " autocomplete--suggestion-hover" : className;
-			},
-		},
+    methods: {
+      formatSuggestion,
+    }
 	};
 </script>
 

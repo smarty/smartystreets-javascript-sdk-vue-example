@@ -3,10 +3,14 @@
 		<InputForm
 			:data="this"
 		/>
-		<Suggestions
-			:suggestions="suggestions"
-			:selectSuggestion="selectSuggestion"
-		/>
+
+    <div v-for="suggestion in suggestions">
+      <Suggestion
+          :suggestion="suggestion"
+          :selectSuggestion="selectSuggestion"
+      />
+    </div>
+
 		<div
 			v-if="error"
 		>
@@ -17,24 +21,24 @@
 </template>
 
 <script>
-	import Vue from "vue";
 	import * as SmartyStreetsSDK from "smartystreets-javascript-sdk";
 	import * as sdkUtils from "smartystreets-javascript-sdk-utils";
 	import InputForm from "./InputForm";
-	import Suggestions from "./Suggestions";
+	import Suggestion from "./Suggestion";
+	import {formatSuggestion} from "../../utils.js";
 
-	const SmartyStreetsCore = SmartyStreetsSDK.core;
+  const SmartyStreetsCore = SmartyStreetsSDK.core;
 	const websiteKey = ""; // Your website key here
 	const smartyStreetsSharedCredentials = new SmartyStreetsCore.SharedCredentials(websiteKey);
 	const autoCompleteClientBuilder = new SmartyStreetsCore.ClientBuilder(smartyStreetsSharedCredentials);
 	const usStreetClientBuilder = new SmartyStreetsCore.ClientBuilder(smartyStreetsSharedCredentials);
 
-	const autoCompleteClient = autoCompleteClientBuilder.buildUsAutocompleteClient();
+	const autoCompleteClient = autoCompleteClientBuilder.buildUsAutocompleteProClient();
 	const usStreetClient = usStreetClientBuilder.buildUsStreetApiClient();
 
 	export default {
 		name: "Autocomplete",
-		components: {InputForm, Suggestions},
+		components: {InputForm, Suggestion},
 		data() {
 			return {
 				shouldValidate: true,
@@ -50,26 +54,33 @@
 		},
 		methods: {
 			queryAutocompleteForSuggestions(query) {
-				const lookup = new SmartyStreetsSDK.usAutocomplete.Lookup(query);
+				const lookup = new SmartyStreetsSDK.usAutocompletePro.Lookup(query);
+				if (query.entries > 1) {
+				  lookup.selected = formatSuggestion(query).selected;
+        }
 
-				autoCompleteClient.send(lookup)
-					.then(response => {
-						this.suggestions = response.result;
-					})
-					.catch((e) => this.error = e.error);
+        if (query) {
+          autoCompleteClient.send(lookup).then(response => {
+              this.suggestions = response.result;
+            })
+            .catch((e) => this.error = e.error);
+        } else {
+          this.suggestions = [];
+        }
 			},
 			selectSuggestion(suggestion) {
-				this.useAutoCompleteSuggestion(suggestion);
-				Vue.nextTick(() => {
-					if (this.shouldValidate) {
-						this.validateAddress();
-					}
-				});
+			  if (suggestion.entries > 1) {
+			    this.queryAutocompleteForSuggestions(suggestion);
+        } else {
+				  this.useAutoCompleteSuggestion(suggestion);
+        }
 			},
 			useAutoCompleteSuggestion(suggestion) {
-				this.address1 = suggestion.streetLine;
+			  const secondary = suggestion.secondary ? ` ${suggestion.secondary}` : "";
+				this.address1 = suggestion.streetLine + secondary;
 				this.city = suggestion.city;
 				this.state = suggestion.state;
+				this.zipCode = suggestion.zipcode;
 				this.suggestions = [];
 			},
 			validateAddress() {
@@ -111,6 +122,7 @@
 					this.error = "";
 				}
 			},
+      formatSuggestion,
 		},
 	};
 </script>
