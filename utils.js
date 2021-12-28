@@ -1,6 +1,5 @@
 import * as SmartyStreetsSDK from "smartystreets-javascript-sdk";
 import * as sdkUtils from "smartystreets-javascript-sdk-utils";
-import Vue from "vue";
 
 const SmartyStreetsCore = SmartyStreetsSDK.core;
 const websiteKey = ""; // Your website key here
@@ -44,7 +43,7 @@ function useAutocompleteSuggestion(suggestion, here) {
   here.city = suggestion.city;
   here.state = suggestion.state;
   here.zipCode = suggestion.zipcode;
-  Vue.set(here, "suggestions", []);
+  here.suggestions = [];
 }
 
 export function selectSuggestion(suggestion) {
