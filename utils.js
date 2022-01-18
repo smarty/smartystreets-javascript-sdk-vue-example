@@ -1,11 +1,11 @@
-import * as SmartyStreetsSDK from "smartystreets-javascript-sdk";
+import * as SmartySDK from "smartystreets-javascript-sdk";
 import * as sdkUtils from "smartystreets-javascript-sdk-utils";
 
-const SmartyStreetsCore = SmartyStreetsSDK.core;
+const SmartyCore = SmartySDK.core;
 const websiteKey = ""; // Your website key here
-const smartyStreetsSharedCredentials = new SmartyStreetsCore.SharedCredentials(websiteKey);
-const autoCompleteClientBuilder = new SmartyStreetsCore.ClientBuilder(smartyStreetsSharedCredentials);
-const usStreetClientBuilder = new SmartyStreetsCore.ClientBuilder(smartyStreetsSharedCredentials);
+const smartySharedCredentials = new SmartyCore.SharedCredentials(websiteKey);
+const autoCompleteClientBuilder = new SmartyCore.ClientBuilder(smartySharedCredentials);
+const usStreetClientBuilder = new SmartyCore.ClientBuilder(smartySharedCredentials);
 
 const autoCompleteClient = autoCompleteClientBuilder.buildUsAutocompleteProClient();
 const usStreetClient = usStreetClientBuilder.buildUsStreetApiClient();
@@ -22,7 +22,7 @@ export function formatSuggestion(suggestion) {
 }
 
 export function queryAutocompleteForSuggestions(query) {
-  const lookup = new SmartyStreetsSDK.usAutocompletePro.Lookup(query);
+  const lookup = new SmartySDK.usAutocompletePro.Lookup(query);
   if (query.entries > 1) {
     lookup.selected = formatSuggestion(query).selected;
   }
@@ -56,7 +56,7 @@ export function selectSuggestion(suggestion) {
 
 
 export function validateAddress() {
-  let lookup = new SmartyStreetsSDK.usStreet.Lookup();
+  let lookup = new SmartySDK.usStreet.Lookup();
   lookup.street = this.address1;
   lookup.street2 = this.address2;
   lookup.city = this.city;
