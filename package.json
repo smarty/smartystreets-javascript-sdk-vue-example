@@ -11,7 +11,7 @@
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@parcel/transformer-vue": "^2.0.0",
+    "@parcel/transformer-vue": "^2.2.1",
     "sass": "^1.26.10"
   },
   "dependencies": {
