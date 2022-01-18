@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="../static/smartystreets-logo-blue.png" alt="smartystreets logo" width="710" height="104"/>
+    <img src="../static/smarty-logo-blue.png" alt="smartystreets logo" width="268" height="75"/>
     <Autocomplete/>
   </div>
 </template>
