@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "parcel": "^2.0.0",
-    "smartystreets-javascript-sdk": "^1.4.5",
-    "smartystreets-javascript-sdk-utils": "^1.1.7",
+    "smartystreets-javascript-sdk": "^1.13.2",
+    "smartystreets-javascript-sdk-utils": "^1.2.5",
     "vue": "^3.2.0-beta.8"
   }
 }
