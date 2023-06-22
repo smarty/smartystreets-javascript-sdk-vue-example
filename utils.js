@@ -2,7 +2,7 @@ import * as SmartySDK from "smartystreets-javascript-sdk";
 import * as sdkUtils from "smartystreets-javascript-sdk-utils";
 
 const SmartyCore = SmartySDK.core;
-const websiteKey = ""; // Your website key here
+const websiteKey = "161298626501163657"; // Your website key here
 const smartySharedCredentials = new SmartyCore.SharedCredentials(websiteKey);
 const autoCompleteClientBuilder = new SmartyCore.ClientBuilder(smartySharedCredentials);
 const usStreetClientBuilder = new SmartyCore.ClientBuilder(smartySharedCredentials);
