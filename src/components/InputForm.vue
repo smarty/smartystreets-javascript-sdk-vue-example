@@ -27,6 +27,20 @@
         @input="data.queryAutocompleteForSuggestions(data.address1)"
       />
     </div>
+    <div class="autocomplete--input-group">
+      <label class="autocomplete--input-label" for="country">
+        Country
+      </label>
+      <select
+          id="country"
+          class="autocomplete--input-field"
+          v-model=data.country
+      >
+        <option v-for="(country, index) in countries" :key="index" :value="country">
+          {{ country.name }}
+        </option>
+      </select>
+    </div>
 
     <button v-on:click="e => {e.preventDefault(); data.validateAddress();}">Validate</button>
   </form>
@@ -34,12 +48,14 @@
 
 <script>
 import inputFields from "../data/input_fields";
+import countries from "../data/countries";
 
 export default {
   name: "InputForm",
   data() {
     return {
       inputFields,
+      countries,
     };
   },
   props: {
