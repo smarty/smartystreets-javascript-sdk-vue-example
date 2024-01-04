@@ -91,44 +91,31 @@ export function validateAddress() {
   }
 }
 
-export function validateUSAddress(here) {
+export async function validateUSAddress(here) {
   let lookup = new SmartySDK.usStreet.Lookup();
 
-  lookup.street = this.address1;
-  lookup.street2 = this.address2;
-  lookup.city = this.city;
-  lookup.state = this.state;
-  lookup.zipCode = this.zipCode;
+  lookup.street = this.address1?.value ? this.address1.value : this.address1;
+  lookup.street2 = this.address2?.value ? this.address2.value : "";
+  lookup.city = this.city?.value ? this.city.value : this.city;
+  lookup.state = this.state?.value ? this.state.value : this.state;
+  lookup.zipCode = this.zipCode?.value ? this.zipCode.value : this.zipCode;
 
   if (!!lookup.street) {
-    usStreetClient.send(lookup)
+    await usStreetClient.send(lookup)
         .then(updateStateFromValidatedAddress)
         .catch(e => this.error = e.error);
   } else {
     this.error = "A street address is required.";
   }
 
-  here.address1 = this.address1;
-  here.address2 = this.address2;
-  here.city = this.city;
-  here.state = this.state;
-  here.zipCode = this.zipCode;
-}
-
-function validateInternationalAddress(here) {
-  let lookup = new SmartySDK.internationalStreet.Lookup();
-  lookup.country = here.country.iso2;
-  lookup.freeform = this.address1;
-
-  internationalStreetClient.send(lookup)
-      .then(updateStateFromValidatedInternationalAddress)
-      .catch(e => this.error = e.error);
-
-  here.address1 = this.address1;
-  here.address2 = this.address2;
-  here.city = this.city;
-  here.state = this.state;
-  here.zipCode = this.zipCode;
+  if (!this.error) {
+    const candidate = lookup.result[0];
+    here.address1 = candidate.deliveryLine1;
+    here.address2 = candidate.deliveryLine2;
+    here.city = candidate.components.cityName;
+    here.state = candidate.components.state;
+    here.zipCode = candidate.components.zipCode + "-" + candidate.components.plus4Code;
+  }
 }
 
 export function updateStateFromValidatedAddress(response) {
@@ -141,25 +128,22 @@ export function updateStateFromValidatedAddress(response) {
   } else if (isAmbiguous) {
     this.error = "The address is ambiguous.";
   } else if (isValid) {
-    const candidate = lookup.result[0];
-
-    this.address1 = candidate.deliveryLine1;
-    this.address2 = candidate.deliveryLine2;
-    this.city = candidate.components.cityName;
-    this.state = candidate.components.state;
-    this.zipCode = candidate.components.zipCode + "-" + candidate.components.plus4Code;
-    console.log(this.zipCode)
     this.error = "";
   }
 }
 
-function updateStateFromValidatedInternationalAddress(response) {
-  const result = response.result[0];
+async function validateInternationalAddress(here) {
+  let lookup = new SmartySDK.internationalStreet.Lookup();
+  lookup.country = here.country.iso2;
+  lookup.freeform = this.address1?.value ? this.address1.value : this.address1;
 
-  this.address1 = result.address1;
-  this.address2 = result.address2;
-  this.city = result.components.locality;
-  this.state = result.components.administrativeArea;
-  this.zipCode = result.components.postalCode;
-  this.error = "";
+  await internationalStreetClient.send(lookup)
+      .catch(e => this.error = e.error);
+
+  const result = lookup.result[0];
+  here.address1 = result.address1;
+  here.address2 = result.address2;
+  here.city = result.components.locality;
+  here.state = result.components.administrativeArea;
+  here.zipCode = result.components.postalCode;
 }
