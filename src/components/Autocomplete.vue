@@ -4,7 +4,7 @@
 
     <div v-for="suggestion in suggestions">
       <div class="autocomplete--suggestion" v-on:click="() => selectSuggestion(suggestion)">
-        {{ formatSuggestion(suggestion).address }}
+        {{ formatSuggestion(suggestion,this.country.iso2).address }}
       </div>
     </div>
 

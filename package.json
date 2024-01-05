@@ -12,13 +12,16 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@parcel/transformer-vue": "^2.8.3",
+    "buffer": "^6.0.3",
     "process": "^0.11.10",
-    "sass": "^1.26.10"
+    "sass": "^1.26.10",
+    "vue-template-compiler": "^2.7.15"
   },
   "dependencies": {
     "parcel": "^2.8.3",
-    "smartystreets-javascript-sdk": "^1.13.2",
+    "smartystreets-javascript-sdk": "^4.0.2",
     "smartystreets-javascript-sdk-utils": "^1.2.5",
-    "vue": "^3.2.0-beta.8"
+    "typescript": "^5.3.3",
+    "vue": "^3.3.11"
   }
 }
