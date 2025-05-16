@@ -3,7 +3,7 @@ import * as sdkUtils from "smartystreets-javascript-sdk-utils";
 import countries from "./src/data/countries";
 
 const SmartyCore = SmartySDK.core;
-const websiteKey = "173801727224679457"; // Your website key here
+const websiteKey = ""; // Your website key here
 const smartySharedCredentials = new SmartyCore.SharedCredentials(websiteKey);
 
 const autoCompleteClient = new SmartyCore.ClientBuilder(smartySharedCredentials).withLicenses(["us-autocomplete-pro-cloud"]).buildUsAutocompleteProClient();
