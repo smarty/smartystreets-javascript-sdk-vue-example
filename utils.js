@@ -45,7 +45,7 @@ export function queryAutocompleteForSuggestions(query) {
   } else {
     this.client = internationalAutocompleteClient;
     if (query.entries > 1) {
-      this.lookup = new SmartySDK.internationalAddressAutocomplete.Lookup({addressId: formatSuggestion(query, this.country.iso2).addressId})
+      this.lookup = new SmartySDK.internationalAddressAutocomplete.Lookup({ addressId: formatSuggestion(query, this.country.iso2).addressId })
     }
     this.lookup = new SmartySDK.internationalAddressAutocomplete.Lookup(query);
     this.lookup.search = query;
@@ -102,8 +102,8 @@ export async function validateUSAddress(here) {
 
   if (!!lookup.street) {
     await usStreetClient.send(lookup)
-        .then(updateStateFromValidatedAddress)
-        .catch(e => this.error = e.error);
+      .then(updateStateFromValidatedAddress)
+      .catch(e => this.error = e.error);
   } else {
     this.error = "A street address is required.";
   }
@@ -138,7 +138,7 @@ async function validateInternationalAddress(here) {
   lookup.freeform = this.address1?.value ? this.address1.value : this.address1;
 
   await internationalStreetClient.send(lookup)
-      .catch(e => this.error = e.error);
+    .catch(e => this.error = e.error);
 
   const result = lookup.result[0];
   here.address1 = result.address1;
