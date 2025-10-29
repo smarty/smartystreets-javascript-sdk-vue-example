@@ -2,7 +2,6 @@
   "name": "smartystreets-javascript-sdk-vue-example",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel index.html --open"
@@ -11,17 +10,17 @@
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@parcel/transformer-vue": "^2.11.0",
+    "@parcel/transformer-vue": "^2.16.0",
+    "@vue/compiler-sfc": "^3.5.22",
     "buffer": "^6.0.3",
     "process": "^0.11.10",
-    "sass": "^1.26.10",
-    "vue-template-compiler": "^0.1.0"
+    "sass": "^1.93.2"
   },
   "dependencies": {
-    "parcel": "^2.11.0",
-    "smartystreets-javascript-sdk": "^5.1.4",
-    "smartystreets-javascript-sdk-utils": "^1.2.5",
-    "typescript": "^5.3.3",
-    "vue": "^3.3.11"
+    "parcel": "^2.16.0",
+    "smartystreets-javascript-sdk": "^7.1.0",
+    "smartystreets-javascript-sdk-utils": "^1.2.7",
+    "typescript": "^5.9.3",
+    "vue": "^3.5.22"
   }
 }
