@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="../static/smarty-logo-blue.png" alt="smartystreets logo" width="268" height="75"/>
+    <img :src="logo" alt="smarty logo" width="268" height="75"/>
     <Autocomplete/>
   </div>
 </template>
@@ -12,6 +12,11 @@ export default {
   name: 'App',
   components: {
     Autocomplete
+  },
+  data() {
+    return {
+      logo: new URL('./assets/smarty-logo-blue.png', import.meta.url).href
+    }
   }
 }
 </script>
